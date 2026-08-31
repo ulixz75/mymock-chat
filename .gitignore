@@ -6,8 +6,11 @@ coverage/
 *.log
 .env*
 !.env.example
+bun.lock
 bun.lockb
 .vite/
 .idea/
 .vscode/
 *.tsbuildinfo
+vercel
+.env.local

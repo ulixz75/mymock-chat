@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "description": "MockChat Studio - Generador de maquetas realistas de conversaciones y comentarios (WhatsApp, Telegram, Instagram, iMessage, etc.) en alta resolución.",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build",
