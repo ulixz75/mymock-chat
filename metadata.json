@@ -1,0 +1,6 @@
+{
+  "name": "MockChat Studio - Generador de Mensajería & Redes",
+  "description": "PWA para crear y exportar maquetas realistas de conversaciones y comentarios en WhatsApp, Telegram, Instagram DM, Messenger, iMessage, Android SMS y redes sociales en alta resolución.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
