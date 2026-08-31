@@ -23,6 +23,8 @@ import { CommentEditor } from './components/editor/CommentEditor';
 import { AppearanceEditor } from './components/editor/AppearanceEditor';
 import { ExportModal } from './components/modals/ExportModal';
 import { TemplatesModal } from './components/modals/TemplatesModal';
+import { ProjectsModal } from './components/modals/ProjectsModal';
+import { getProjects, saveProject, deleteProject as deleteStoredProject, getCurrentStateFallback, StoredProject, MAX_PROJECTS } from './data/storage';
 import * as htmlToImage from 'html-to-image';
 import confetti from 'canvas-confetti';
 import { 
@@ -40,35 +42,51 @@ import {
   HelpCircle,
   Eye,
   Sun,
-  Moon
+  Moon,
+  History,
+  Save
 } from 'lucide-react';
 
 export default function App() {
-  const [state, setState] = useState<MockState>(() => {
-    const saved = localStorage.getItem('mockchat_current_state');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        return DEFAULT_MOCK_STATE;
-      }
-    }
-    return DEFAULT_MOCK_STATE;
-  });
+  const [state, setState] = useState<MockState>(() => getCurrentStateFallback(DEFAULT_MOCK_STATE));
 
   const [activeTab, setActiveTab] = useState<'platform' | 'content' | 'profile' | 'style'>('content');
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false);
+  const [isProjectsModalOpen, setIsProjectsModalOpen] = useState(false);
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
   const [selectedCommentId, setSelectedCommentId] = useState<string | null>(null);
   const [quickCopied, setQuickCopied] = useState(false);
+  const [projects, setProjects] = useState<StoredProject[]>(() => getProjects());
 
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  // Save to local storage on changes
+  // Persist current + historial LRU (máx 10) - sin backend
   useEffect(() => {
     localStorage.setItem('mockchat_current_state', JSON.stringify(state));
   }, [state]);
+
+  // Auto-guardado al historial con debounce 800ms (cuando el usuario termina de editar)
+  const saveTimeoutRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = window.setTimeout(() => {
+      const updated = saveProject(state);
+      setProjects(updated);
+    }, 800);
+    return () => {
+      if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
+    };
+  }, [state]);
+
+  // Inicializar historial si está vacío
+  useEffect(() => {
+    if (projects.length === 0) {
+      const seeded = saveProject(state);
+      setProjects(seeded);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Handlers for updating state
   const handleSelectPlatform = (platform: PlatformId) => {
@@ -199,6 +217,36 @@ export default function App() {
     }));
   };
 
+  const handleLoadProject = (projectState: MockState) => {
+    setState(projectState);
+    setIsProjectsModalOpen(false);
+    confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 } });
+  };
+
+  const handleDeleteProject = (id: string) => {
+    const updated = deleteStoredProject(id);
+    setProjects(updated);
+  };
+
+  const handleDuplicateProject = (projectState: MockState) => {
+    const duplicated: MockState = {
+      ...JSON.parse(JSON.stringify(projectState)),
+      id: `mock-${Date.now()}`,
+      title: `${projectState.title || projectState.platform} (copia)`,
+    };
+    setState(duplicated);
+    const updated = saveProject(duplicated);
+    setProjects(updated);
+    setIsProjectsModalOpen(false);
+  };
+
+  const handleSaveManual = () => {
+    const updated = saveProject({ ...state, title: state.title || `Mock ${new Date().toLocaleDateString()}` });
+    setProjects(updated);
+    setIsProjectsModalOpen(true);
+    confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
+  };
+
   const handleQuickCopy = async () => {
     try {
       const node = canvasRef.current || document.getElementById('export-canvas-target');
@@ -262,7 +310,28 @@ export default function App() {
         </div>
 
         {/* Top Actions - wrap on very small screens */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 flex-wrap justify-end max-w-[62%] sm:max-w-none">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 flex-wrap justify-end max-w-[68%] sm:max-w-none">
+          {/* Mis creaciones - Historial 10 max LRU */}
+          <button
+            onClick={() => setIsProjectsModalOpen(true)}
+            className="px-2 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 flex items-center space-x-1 sm:space-x-1.5 transition-colors shadow-xs min-h-[32px] relative"
+            title="Ver historial (máx 10 - la más vieja se borra)"
+          >
+            <History className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+            <span className="hidden sm:inline">Mis creaciones</span>
+            <span className="sm:hidden text-[11px]">Historial</span>
+            <span className="px-1 py-0.5 bg-indigo-600 text-white text-[10px] font-bold rounded-full min-w-[18px] text-center leading-none">{projects.length}/{MAX_PROJECTS}</span>
+          </button>
+          {/* Guardar ahora */}
+          <button
+            onClick={handleSaveManual}
+            className="hidden sm:flex px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white text-xs font-semibold rounded-lg items-center space-x-1 transition-colors shadow-xs min-h-[32px]"
+            title="Guardar esta creación en historial (máx 10)"
+          >
+            <Save className="w-3.5 h-3.5 shrink-0" />
+            <span>Guardar</span>
+          </button>
+
           {/* Theme Toggle - Light / Dark (visible siempre) */}
           <button
             onClick={handleToggleTheme}
@@ -466,6 +535,17 @@ export default function App() {
         isOpen={isTemplatesModalOpen}
         onClose={() => setIsTemplatesModalOpen(false)}
         onSelectTemplate={handleSelectTemplate}
+      />
+
+      {/* Projects History Modal - 10 max LRU */}
+      <ProjectsModal
+        isOpen={isProjectsModalOpen}
+        onClose={() => setIsProjectsModalOpen(false)}
+        projects={projects}
+        currentId={state.id}
+        onLoad={handleLoadProject}
+        onDelete={handleDeleteProject}
+        onDuplicate={handleDuplicateProject}
       />
     </div>
   );
