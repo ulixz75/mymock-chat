@@ -38,7 +38,9 @@ import {
   Layers, 
   Share2, 
   HelpCircle,
-  Eye
+  Eye,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 export default function App() {
@@ -231,6 +233,10 @@ export default function App() {
     }
   };
 
+  const handleToggleTheme = () => {
+    setState((prev) => ({ ...prev, theme: prev.theme === 'dark' ? 'light' : 'dark' }));
+  };
+
   const isCommentPlatform = state.platform === 'instagram_comment' || state.platform === 'tiktok_comment';
 
   return (
@@ -257,6 +263,30 @@ export default function App() {
 
         {/* Top Actions */}
         <div className="flex items-center space-x-2">
+          {/* Theme Toggle - Light / Dark (visible siempre) */}
+          <button
+            onClick={handleToggleTheme}
+            className={`px-3 py-1.5 rounded-lg border flex items-center space-x-1.5 transition-all shadow-xs text-xs font-semibold ${
+              state.theme === 'dark'
+                ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
+                : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+            }`}
+            title={state.theme === 'dark' ? 'Cambiar a modo Claro' : 'Cambiar a modo Oscuro'}
+            aria-label="Cambiar tema"
+          >
+            {state.theme === 'dark' ? (
+              <>
+                <Moon className="w-3.5 h-3.5 text-indigo-400" />
+                <span className="hidden sm:inline">Oscuro</span>
+              </>
+            ) : (
+              <>
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
+                <span className="hidden sm:inline">Claro</span>
+              </>
+            )}
+          </button>
+
           {/* Templates Library Button */}
           <button
             onClick={() => setIsTemplatesModalOpen(true)}

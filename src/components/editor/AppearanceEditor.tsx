@@ -33,9 +33,17 @@ export const AppearanceEditor: React.FC<Props> = ({
     <div className="space-y-4">
       {/* Theme Selection: Light / Dark */}
       <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-          <Palette className="w-3.5 h-3.5 text-indigo-400" /> Tema Visual
-        </span>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+            <Palette className="w-3.5 h-3.5 text-indigo-400" /> Tema del Preview
+          </span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+            por defecto: Dark
+          </span>
+        </div>
+        <p className="text-[11px] text-slate-400 leading-relaxed">
+          Elige cómo se ve el mock. También puedes cambiarlo rápido desde el botón <span className="text-slate-200 font-semibold inline-flex items-center gap-1">{theme === 'dark' ? <><Moon className="w-3 h-3 inline" /> Oscuro</> : <><Sun className="w-3 h-3 inline" /> Claro</>} </span> en la barra superior.
+        </p>
 
         <div className="grid grid-cols-2 gap-2">
           <button
@@ -47,19 +55,19 @@ export const AppearanceEditor: React.FC<Props> = ({
             }`}
           >
             <Moon className="w-4 h-4 text-indigo-400" />
-            <span className="text-xs">Modo Oscuro (Dark)</span>
+            <span className="text-xs">Oscuro (Dark)</span>
           </button>
 
           <button
             onClick={() => onChangeTheme('light')}
             className={`py-2.5 px-3 rounded-xl border flex items-center justify-center space-x-2 transition-all ${
               theme === 'light'
-                ? 'bg-slate-800 border-indigo-500 ring-2 ring-indigo-500/40 text-white font-semibold'
+                ? 'bg-white border-indigo-500 ring-2 ring-indigo-500/40 text-slate-900 font-semibold'
                 : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
             }`}
           >
-            <Sun className="w-4 h-4 text-amber-400" />
-            <span className="text-xs">Modo Claro (Light)</span>
+            <Sun className="w-4 h-4 text-amber-500" />
+            <span className="text-xs">Claro (Light)</span>
           </button>
         </div>
       </div>
