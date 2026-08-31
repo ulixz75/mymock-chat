@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Mobile UX helpers */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+/* iOS safe area + tap highlight */
+* {
+  -webkit-tap-highlight-color: transparent;
+}

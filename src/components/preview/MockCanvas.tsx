@@ -177,7 +177,7 @@ export const MockCanvas = forwardRef<HTMLDivElement, Props>(({
       {/* Social Card Mode (like the attached testimonial photo) */}
       {isCardMode ? (
         <div 
-          className={`w-full max-w-[620px] rounded-2xl overflow-hidden transition-shadow ${
+          className={`w-full max-w-[92vw] sm:max-w-[620px] rounded-xl sm:rounded-2xl overflow-hidden transition-shadow ${
             isDark ? 'bg-black text-white' : 'bg-white text-slate-900'
           } ${exportSettings.showShadow ? 'shadow-2xl ring-1 ring-white/10' : ''}`}
         >
@@ -186,7 +186,7 @@ export const MockCanvas = forwardRef<HTMLDivElement, Props>(({
       ) : isFrameless ? (
         /* Frameless mode: Clean screenshot view */
         <div 
-          className={`w-full max-w-[390px] min-h-[640px] flex flex-col rounded-2xl overflow-hidden ${
+          className={`w-[88vw] max-w-[340px] sm:max-w-[390px] min-h-[560px] sm:min-h-[640px] flex flex-col rounded-xl sm:rounded-2xl overflow-hidden ${
             isDark ? 'bg-black' : 'bg-white'
           } ${exportSettings.showShadow ? 'shadow-2xl ring-1 ring-white/10' : ''}`}
         >
@@ -197,10 +197,10 @@ export const MockCanvas = forwardRef<HTMLDivElement, Props>(({
       ) : (
         /* Realistic Phone Chassis Frame (iPhone 16 Pro / Android) */
         <div 
-          className={`w-full max-w-[390px] min-h-[720px] rounded-[48px] p-3 transition-all relative flex flex-col ${
+          className={`w-[88vw] max-w-[340px] sm:max-w-[390px] min-h-[600px] sm:min-h-[720px] rounded-[36px] sm:rounded-[48px] p-2 sm:p-3 transition-all relative flex flex-col ${
             device === 'iphone_16_pro' 
-              ? 'bg-[#2b2a2e] ring-[5px] ring-[#464549] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)]' 
-              : 'bg-[#1e1e1e] ring-[4px] ring-[#333333] shadow-2xl rounded-[40px]'
+              ? 'bg-[#2b2a2e] ring-[4px] sm:ring-[5px] ring-[#464549] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)]' 
+              : 'bg-[#1e1e1e] ring-[3px] sm:ring-[4px] ring-[#333333] shadow-2xl rounded-[32px] sm:rounded-[40px]'
           } ${exportSettings.showShadow ? 'shadow-2xl' : ''}`}
         >
           {/* Outer chassis hardware buttons */}
@@ -210,7 +210,7 @@ export const MockCanvas = forwardRef<HTMLDivElement, Props>(({
           <div className="absolute -right-[7px] top-32 w-[3px] h-16 bg-neutral-600 rounded-r-xs" />
 
           {/* Screen Bezel & Inner display */}
-          <div className={`w-full flex-1 flex flex-col rounded-[38px] overflow-hidden ${
+          <div className={`w-full flex-1 flex flex-col rounded-[28px] sm:rounded-[38px] overflow-hidden ${
             isDark ? 'bg-black' : 'bg-white'
           }`}>
             <DeviceStatusBar config={state.statusBar} theme={theme} device={device} />

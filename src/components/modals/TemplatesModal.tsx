@@ -41,34 +41,34 @@ export const TemplatesModal: React.FC<Props> = ({
     : TEMPLATES_LIBRARY.filter((t) => t.category === selectedCategory || (selectedCategory === 'whatsapp' && t.platform === 'whatsapp') || (selectedCategory === 'instagram' && (t.platform === 'instagram_comment' || t.platform === 'instagram_dm')));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[85vh]">
         {/* Header */}
-        <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+        <div className="p-3 sm:p-4 border-b border-slate-800 flex items-center justify-between gap-2">
+          <div className="flex items-center space-x-2 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
               <Sparkles className="w-4 h-4" />
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-white">Galería de Plantillas & Conversaciones</h3>
-              <p className="text-[11px] text-slate-400">Selecciona una plantilla pre-diseñada para cargarla y editarla al instante.</p>
+            <div className="min-w-0">
+              <h3 className="text-[13px] sm:text-sm font-bold text-white leading-tight truncate">Galería de Plantillas</h3>
+              <p className="text-[11px] text-slate-400 hidden sm:block">Selecciona una plantilla pre-diseñada para cargarla y editarla al instante.</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white rounded-lg">
+          <button onClick={onClose} className="p-2 sm:p-1 text-slate-400 hover:text-white active:text-white rounded-lg shrink-0 min-w-[40px] min-h-[40px] sm:min-w-0 sm:min-h-0 flex items-center justify-center">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Category Pills */}
-        <div className="p-3 border-b border-slate-800/80 bg-slate-950/40 flex items-center space-x-1.5 overflow-x-auto">
+        {/* Category Pills - scrollable with snap */}
+        <div className="p-2.5 sm:p-3 border-b border-slate-800/80 bg-slate-950/40 flex items-center gap-1.5 overflow-x-auto scrollbar-none snap-x snap-mandatory [-webkit-overflow-scrolling:touch]">
           {categories.map((c) => (
             <button
               key={c.id}
               onClick={() => setSelectedCategory(c.id)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
+              className={`px-3 py-2 sm:py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors snap-start min-h-[36px] sm:min-h-0 ${
                 selectedCategory === c.id
                   ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700'
+                  : 'bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700 active:bg-slate-700'
               }`}
             >
               {c.label}
@@ -77,7 +77,7 @@ export const TemplatesModal: React.FC<Props> = ({
         </div>
 
         {/* Templates Grid */}
-        <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-3.5 overflow-y-auto">
+        <div className="p-3 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-3.5 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
           {filtered.map((tpl) => {
             const isFeatured = tpl.id === 'tpl-ig-comment-nabori';
 

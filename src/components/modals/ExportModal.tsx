@@ -161,33 +161,33 @@ export const ExportModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[90vh]">
         {/* Header */}
-        <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+        <div className="p-3 sm:p-4 border-b border-slate-800 flex items-center justify-between gap-2">
+          <div className="flex items-center space-x-2 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center shrink-0">
               <FileImage className="w-4 h-4" />
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-white">Exportar Mockup en Alta Resolución</h3>
-              <p className="text-[11px] text-slate-400">Genera gráficos listos para publicaciones, anuncios o presentaciones.</p>
+            <div className="min-w-0">
+              <h3 className="text-[13px] sm:text-sm font-bold text-white leading-tight">Exportar Mockup en Alta Resolución</h3>
+              <p className="text-[10px] sm:text-[11px] text-slate-400 hidden sm:block">Gráficos listos para publicaciones, anuncios o presentaciones.</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white rounded-lg">
+          <button onClick={onClose} className="p-2 sm:p-1 text-slate-400 hover:text-white active:text-white rounded-lg shrink-0 min-w-[40px] min-h-[40px] sm:min-w-0 sm:min-h-0 flex items-center justify-center">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Settings Body */}
-        <div className="p-5 space-y-4 overflow-y-auto max-h-[70vh]">
+        <div className="p-3 sm:p-5 space-y-4 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
           {/* Resolution Scale */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center justify-between">
-              <span>Resolución & Calidad de Renderizado</span>
-              <span className="text-indigo-400 font-bold">{exportSettings.scale}x ({exportSettings.scale * 100}% Retina)</span>
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <span>Resolución & Calidad</span>
+              <span className="text-indigo-400 font-bold text-xs">{exportSettings.scale}x ({exportSettings.scale * 100}% Retina)</span>
             </label>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
                 { scale: 1, label: '1x Estándar', desc: 'Web rápido' },
                 { scale: 2, label: '2x HD', desc: 'Redes sociales' },
@@ -215,7 +215,7 @@ export const ExportModal: React.FC<Props> = ({
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
               Formato de Archivo
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { id: 'png', label: 'PNG (Recomendado)', desc: 'Sin pérdida de calidad' },
                 { id: 'jpeg', label: 'JPG / JPEG', desc: 'Fondo sólido comprimido' },
@@ -250,7 +250,7 @@ export const ExportModal: React.FC<Props> = ({
             <button
               disabled={isExporting}
               onClick={handleDownload}
-              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold text-sm rounded-xl flex items-center justify-center space-x-2 transition-colors shadow-lg shadow-indigo-600/30"
+              className="w-full py-3.5 sm:py-3 px-4 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 disabled:opacity-50 text-white font-bold text-sm rounded-xl flex items-center justify-center space-x-2 transition-colors shadow-lg shadow-indigo-600/30 min-h-[48px]"
             >
               {isExporting ? (
                 <>
@@ -268,7 +268,7 @@ export const ExportModal: React.FC<Props> = ({
             <button
               disabled={isExporting}
               onClick={handleCopyToClipboard}
-              className="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 disabled:opacity-50 text-slate-200 font-semibold text-xs rounded-xl flex items-center justify-center space-x-2 transition-colors"
+              className="w-full py-3 sm:py-2.5 px-4 bg-slate-800 hover:bg-slate-700 active:bg-slate-700 border border-slate-700 disabled:opacity-50 text-slate-200 font-semibold text-xs rounded-xl flex items-center justify-center space-x-2 transition-colors min-h-[44px] text-center leading-tight"
             >
               {copied ? (
                 <>
