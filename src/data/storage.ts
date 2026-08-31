@@ -2,7 +2,7 @@ import { MockState } from '../types';
 
 export const PROJECTS_KEY = 'mockchat_projects';
 export const CURRENT_KEY = 'mockchat_current_state';
-export const MAX_PROJECTS = 10;
+export const MAX_PROJECTS = 5;
 
 export interface StoredProject {
   state: MockState;
@@ -40,19 +40,27 @@ function persistProjects(projects: StoredProject[]) {
  * Si supera MAX_PROJECTS elimina el más viejo (último).
  * Retorna lista actualizada.
  */
-export function saveProject(state: MockState): StoredProject[] {
+export function saveProject(state: MockState, opts?: { asNew?: boolean }): StoredProject[] {
   const now = Date.now();
   // clonar para evitar mutar
   const snapshot: MockState = JSON.parse(JSON.stringify(state));
   // asegurar id y title
-  if (!snapshot.id) snapshot.id = `mock-${now}`;
+  if (!snapshot.id || opts?.asNew) snapshot.id = `mock-${now}-${Math.random().toString(36).slice(2,6)}`;
   if (!snapshot.title) snapshot.title = snapshot.platform || 'Mock sin título';
+  // si se guarda como nuevo, cambiar título para diferenciar
+  if (opts?.asNew && !snapshot.title.includes('(copia')) {
+    // mantener título original, se diferenciará por fecha
+  }
 
   let projects = getProjects();
-  // quitar existente con mismo id
-  projects = projects.filter((p) => p.state.id !== snapshot.id);
-  // poner al frente como más reciente
-  projects.unshift({ state: snapshot, savedAt: now });
+  if (opts?.asNew) {
+    // crear nueva entrada sin borrar la anterior
+    projects.unshift({ state: snapshot, savedAt: now });
+  } else {
+    // actualizar existente: quitar duplicado y poner al frente
+    projects = projects.filter((p) => p.state.id !== snapshot.id);
+    projects.unshift({ state: snapshot, savedAt: now });
+  }
   // evicción LRU: mantener solo MAX_PROJECTS
   if (projects.length > MAX_PROJECTS) {
     projects = projects.slice(0, MAX_PROJECTS);
@@ -61,6 +69,11 @@ export function saveProject(state: MockState): StoredProject[] {
   // también sincronizar current
   localStorage.setItem(CURRENT_KEY, JSON.stringify(snapshot));
   return projects;
+}
+
+/** Guarda como nueva creación (fuerza nuevo id) para historial de 5 */
+export function saveAsNewProject(state: MockState): StoredProject[] {
+  return saveProject(state, { asNew: true });
 }
 
 export function deleteProject(id: string): StoredProject[] {

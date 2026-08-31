@@ -24,7 +24,7 @@ import { AppearanceEditor } from './components/editor/AppearanceEditor';
 import { ExportModal } from './components/modals/ExportModal';
 import { TemplatesModal } from './components/modals/TemplatesModal';
 import { ProjectsModal } from './components/modals/ProjectsModal';
-import { getProjects, saveProject, deleteProject as deleteStoredProject, getCurrentStateFallback, StoredProject, MAX_PROJECTS } from './data/storage';
+import { getProjects, saveProject, saveAsNewProject, deleteProject as deleteStoredProject, getCurrentStateFallback, StoredProject, MAX_PROJECTS } from './data/storage';
 import * as htmlToImage from 'html-to-image';
 import confetti from 'canvas-confetti';
 import { 
@@ -61,12 +61,12 @@ export default function App() {
 
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  // Persist current + historial LRU (máx 10) - sin backend
+  // Persist current - sin backend
   useEffect(() => {
     localStorage.setItem('mockchat_current_state', JSON.stringify(state));
   }, [state]);
 
-  // Auto-guardado al historial con debounce 800ms (cuando el usuario termina de editar)
+  // Auto-actualiza la entrada actual en historial (no crea duplicados al tipear)
   const saveTimeoutRef = useRef<number | null>(null);
   useEffect(() => {
     if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
@@ -241,8 +241,12 @@ export default function App() {
   };
 
   const handleSaveManual = () => {
-    const updated = saveProject({ ...state, title: state.title || `Mock ${new Date().toLocaleDateString()}` });
+    // Guardar como nueva creación: fuerza nuevo id para ocupar slot en historial 5
+    const withTitle = { ...state, title: state.title?.trim() ? state.title : `${state.platform} - ${new Date().toLocaleDateString('es-ES')}` };
+    const updated = saveAsNewProject(withTitle);
     setProjects(updated);
+    const latest = updated[0]?.state;
+    if (latest) setState(latest);
     setIsProjectsModalOpen(true);
     confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
   };
@@ -311,11 +315,11 @@ export default function App() {
 
         {/* Top Actions - wrap on very small screens */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 flex-wrap justify-end max-w-[68%] sm:max-w-none">
-          {/* Mis creaciones - Historial 10 max LRU */}
+          {/* Mis creaciones - Historial 5 max LRU */}
           <button
             onClick={() => setIsProjectsModalOpen(true)}
             className="px-2 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 flex items-center space-x-1 sm:space-x-1.5 transition-colors shadow-xs min-h-[32px] relative"
-            title="Ver historial (máx 10 - la más vieja se borra)"
+            title="Ver historial (máx 5 - la más vieja se borra)"
           >
             <History className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
             <span className="hidden sm:inline">Mis creaciones</span>
@@ -326,7 +330,7 @@ export default function App() {
           <button
             onClick={handleSaveManual}
             className="hidden sm:flex px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white text-xs font-semibold rounded-lg items-center space-x-1 transition-colors shadow-xs min-h-[32px]"
-            title="Guardar esta creación en historial (máx 10)"
+            title="Guardar como nueva creación en historial (máx 5)"
           >
             <Save className="w-3.5 h-3.5 shrink-0" />
             <span>Guardar</span>
@@ -537,7 +541,7 @@ export default function App() {
         onSelectTemplate={handleSelectTemplate}
       />
 
-      {/* Projects History Modal - 10 max LRU */}
+      {/* Projects History Modal - 5 max LRU */}
       <ProjectsModal
         isOpen={isProjectsModalOpen}
         onClose={() => setIsProjectsModalOpen(false)}

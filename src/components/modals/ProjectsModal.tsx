@@ -35,8 +35,8 @@ export const ProjectsModal: React.FC<Props> = ({ isOpen, onClose, projects, curr
               <h3 className="text-[13px] sm:text-sm font-bold text-white leading-tight flex items-center gap-1.5">
                 Mis creaciones <span className="text-indigo-400 font-mono text-xs">({projects.length}/{MAX_PROJECTS})</span>
               </h3>
-              <p className="text-[11px] text-slate-400 hidden sm:block">Se guardan localmente. Al llegar a 10, se borra la más antigua y entra la nueva.</p>
-              <p className="text-[10px] text-slate-400 sm:hidden">Máx 10 · LRU: la más vieja se borra</p>
+              <p className="text-[11px] text-slate-400 hidden sm:block">Se guardan localmente. Al llegar a {MAX_PROJECTS}, se borra la más antigua y entra la nueva.</p>
+              <p className="text-[10px] text-slate-400 sm:hidden">Máx {MAX_PROJECTS} · LRU: la más vieja se borra</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 sm:p-1 text-slate-400 hover:text-white active:text-white rounded-lg shrink-0 min-w-[40px] min-h-[40px] sm:min-w-0 sm:min-h-0 flex items-center justify-center">
@@ -58,7 +58,7 @@ export const ProjectsModal: React.FC<Props> = ({ isOpen, onClose, projects, curr
                 <History className="w-6 h-6" />
               </div>
               <p className="text-sm text-slate-300 font-semibold">Aún no hay creaciones guardadas</p>
-              <p className="text-xs text-slate-500 mt-1">Edita el mock actual y se guardará automáticamente aquí.</p>
+              <p className="text-xs text-slate-500 mt-1">Edita el mock y pulsa <span className="text-emerald-400 font-semibold">Guardar</span> para crear una entrada. Auto-guardado actualiza la más reciente.</p>
             </div>
           ) : (
             projects.map((p, idx) => {
