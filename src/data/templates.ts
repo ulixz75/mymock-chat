@@ -64,6 +64,45 @@ export const DEFAULT_MOCK_STATE: MockState = {
       }
     ]
   },
+  reviewConfig: {
+    businessName: 'Nabori Corp',
+    businessAvatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=256&h=256&q=80',
+    businessAddress: 'Av. Reforma 222, CDMX',
+    rating: 5,
+    reviewDate: 'hace 2 días',
+    authorName: 'Ana Martínez',
+    authorAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&h=256&q=80',
+    isLocalGuide: true,
+    reviewCount: '23 reseñas',
+    content: '¡Experiencia 5 estrellas! El servicio superó mis expectativas, atención rápida y resultados visibles en 2 semanas. Totalmente recomendado.',
+    helpfulCount: '24',
+    ownerResponse: '¡Gracias Ana! Nos alegra saber que estás feliz con los resultados. Seguimos a tu lado.',
+    ownerResponseDate: 'hace 1 día',
+    verifiedPurchase: true,
+    platformLabel: 'google',
+    trustScore: '4.9',
+  },
+  storyConfig: {
+    storyOwnerUsername: 'naboricorp',
+    storyOwnerAvatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=256&h=256&q=80',
+    storyImageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80',
+    mode: 'poll',
+    pollQuestion: '¿Te gustó el resultado?',
+    pollOptions: ['Sí, brutal 🤩', 'Aún no 😅'],
+    pollPercent: [72, 28],
+    replyText: '¡Felicidades! El cambio es increíble 🔥',
+    viewerCount: '1.8k vistas',
+  },
+  pushConfig: {
+    appName: 'Nabori App',
+    appIcon: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=256&h=256&q=80',
+    title: '¡Pago confirmado! 🎉',
+    body: 'Tu acceso ya está activo. Entra a la plataforma y comienza hoy.',
+    timeAgo: 'ahora',
+    badgeCount: 3,
+    pushStyle: 'ios',
+    showActions: true,
+  },
   messages: [
     {
       id: 'm-1',
@@ -576,6 +615,117 @@ export const TEMPLATES_LIBRARY: TemplatePreset[] = [
           reactions: [{ emoji: '👍', count: 1 }]
         }
       ]
+    }
+  },
+  {
+    id: 'tpl-google-review',
+    title: 'Google Reviews 5★ - Testimonio Verificado',
+    category: 'testimonial',
+    description: 'Reseña Google con estrellas, Local Guide y respuesta del propietario.',
+    platform: 'google_review',
+    mockType: 'review',
+    data: {
+      platform: 'google_review',
+      mockType: 'review',
+      theme: 'light',
+      device: 'social_card',
+      reviewConfig: {
+        businessName: 'Nabori Corp',
+        businessAvatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=256&h=256&q=80',
+        businessAddress: 'Av. Reforma 222, CDMX · 4.9 ★ (1,248)',
+        rating: 5,
+        reviewDate: 'hace 3 días',
+        authorName: 'Carlos Mendoza',
+        authorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&h=256&q=80',
+        isLocalGuide: true,
+        reviewCount: '47 reseñas',
+        content: 'Servicio excelente. Desde la primera asesoría noté el cambio en mi hijo. Atención personalizada y resultados en 2 semanas. 100% recomendado.',
+        helpfulCount: '18',
+        ownerResponse: '¡Gracias Carlos! Tu testimonio nos motiva a seguir entregando lo mejor.',
+        ownerResponseDate: 'hace 1 día',
+        verifiedPurchase: true,
+        platformLabel: 'google',
+        trustScore: '4.9',
+      }
+    }
+  },
+  {
+    id: 'tpl-trustpilot',
+    title: 'Trustpilot Verificada - Excelente',
+    category: 'testimonial',
+    description: 'Reseña Trustpilot con TrustScore, verificada e invitada.',
+    platform: 'trustpilot_review',
+    mockType: 'review',
+    data: {
+      platform: 'trustpilot_review',
+      mockType: 'review',
+      theme: 'light',
+      device: 'social_card',
+      reviewConfig: {
+        businessName: 'Nabori Academy',
+        businessAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&h=256&q=80',
+        rating: 5,
+        reviewDate: 'hace 5 días',
+        authorName: 'Elena Gómez',
+        authorAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&h=256&q=80',
+        isLocalGuide: false,
+        reviewCount: '12 reseñas',
+        content: 'Compré el curso y superó mis expectativas. Soporte 24/7 real y contenido de calidad. Ya recomendé a 3 amigas y todas felices.',
+        helpfulCount: '31',
+        ownerResponse: '¡Gracias Elena por tu confianza! Nos encanta verte crecer con nosotros.',
+        ownerResponseDate: 'hace 2 días',
+        verifiedPurchase: true,
+        platformLabel: 'trustpilot',
+        trustScore: '4.7',
+      }
+    }
+  },
+  {
+    id: 'tpl-story-poll',
+    title: 'Instagram Story - Encuesta Poll',
+    category: 'viral',
+    description: 'Historia con encuesta Sí/No y porcentajes, lista para viralizar.',
+    platform: 'instagram_story',
+    mockType: 'story',
+    data: {
+      platform: 'instagram_story',
+      mockType: 'story',
+      theme: 'dark',
+      device: 'iphone_16_pro',
+      storyConfig: {
+        storyOwnerUsername: 'naboricorp',
+        storyOwnerAvatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=256&h=256&q=80',
+        storyImageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80',
+        mode: 'poll',
+        pollQuestion: '¿Quieres ver el cambio completo?',
+        pollOptions: ['¡Sí! 😍', 'Obvio 🔥'],
+        pollPercent: [82, 18],
+        viewerCount: '2.4k vistas',
+      }
+    }
+  },
+  {
+    id: 'tpl-push-ios',
+    title: 'Push Notificación iOS - Pago Confirmado',
+    category: 'sales',
+    description: 'Banner push iOS/Android con app icon, título y badge, ideal para prueba de pago.',
+    platform: 'push_notification',
+    mockType: 'notification',
+    data: {
+      platform: 'push_notification',
+      mockType: 'notification',
+      theme: 'light',
+      device: 'iphone_16_pro',
+      pushConfig: {
+        appName: 'Nabori App',
+        appIcon: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=256&h=256&q=80',
+        title: '¡Pago recibido! ✅',
+        body: 'Carlos, tu transferencia de $1,250 MXN fue confirmada. Acceso activado.',
+        timeAgo: 'ahora',
+        badgeCount: 1,
+        pushStyle: 'ios',
+        showActions: true,
+      }
     }
   }
 ];

@@ -12,7 +12,10 @@ import {
   ContactConfig, 
   StatusBarConfig, 
   ChatConfig, 
-  CommentConfig 
+  CommentConfig,
+  ReviewConfig,
+  StoryConfig,
+  PushConfig
 } from './types';
 import { DEFAULT_MOCK_STATE, TEMPLATES_LIBRARY } from './data/templates';
 import { MockCanvas } from './components/preview/MockCanvas';
@@ -21,6 +24,9 @@ import { HeaderEditor } from './components/editor/HeaderEditor';
 import { MessagesEditor } from './components/editor/MessagesEditor';
 import { CommentEditor } from './components/editor/CommentEditor';
 import { AppearanceEditor } from './components/editor/AppearanceEditor';
+import { ReviewEditor } from './components/editor/ReviewEditor';
+import { StoryEditor } from './components/editor/StoryEditor';
+import { PushEditor } from './components/editor/PushEditor';
 import { ExportModal } from './components/modals/ExportModal';
 import { TemplatesModal } from './components/modals/TemplatesModal';
 import { ProjectsModal } from './components/modals/ProjectsModal';
@@ -91,6 +97,11 @@ export default function App() {
   // Handlers for updating state
   const handleSelectPlatform = (platform: PlatformId) => {
     const isComment = platform === 'instagram_comment' || platform === 'tiktok_comment';
+    const isReview = platform === 'google_review' || platform === 'trustpilot_review';
+    const isStory = platform === 'instagram_story';
+    const isPush = platform === 'push_notification';
+    const mockType: MockType = isComment ? 'comment' : isReview ? 'review' : isStory ? 'story' : isPush ? 'notification' : 'chat';
+    const isCardLike = isComment || isReview;
     
     // Pick relevant template if switching major types
     const matchingTemplate = TEMPLATES_LIBRARY.find((t) => t.platform === platform);
@@ -98,8 +109,8 @@ export default function App() {
     setState((prev) => ({
       ...prev,
       platform,
-      mockType: isComment ? 'comment' : 'chat',
-      device: isComment && prev.device !== 'social_card' ? 'social_card' : (prev.device === 'social_card' && !isComment ? 'iphone_16_pro' : prev.device),
+      mockType,
+      device: isCardLike && prev.device !== 'social_card' ? 'social_card' : (prev.device === 'social_card' && !isCardLike ? 'iphone_16_pro' : prev.device),
       ...(matchingTemplate?.data ? matchingTemplate.data : {})
     }));
   };
@@ -136,6 +147,27 @@ export default function App() {
     setState((prev) => ({
       ...prev,
       commentConfig: { ...prev.commentConfig, ...updates }
+    }));
+  };
+
+  const handleUpdateReviewConfig = (updates: Partial<ReviewConfig>) => {
+    setState((prev) => ({
+      ...prev,
+      reviewConfig: { ...prev.reviewConfig, ...updates }
+    }));
+  };
+
+  const handleUpdateStoryConfig = (updates: Partial<StoryConfig>) => {
+    setState((prev) => ({
+      ...prev,
+      storyConfig: { ...prev.storyConfig, ...updates }
+    }));
+  };
+
+  const handleUpdatePushConfig = (updates: Partial<PushConfig>) => {
+    setState((prev) => ({
+      ...prev,
+      pushConfig: { ...prev.pushConfig, ...updates }
     }));
   };
 
@@ -290,6 +322,9 @@ export default function App() {
   };
 
   const isCommentPlatform = state.platform === 'instagram_comment' || state.platform === 'tiktok_comment';
+  const isReviewPlatform = state.platform === 'google_review' || state.platform === 'trustpilot_review';
+  const isStoryPlatform = state.platform === 'instagram_story';
+  const isPushPlatform = state.platform === 'push_notification';
 
   return (
     <div className="flex flex-col h-full bg-slate-950 text-slate-100 font-sans">
@@ -446,7 +481,7 @@ export default function App() {
           <div className="flex items-center border-b border-slate-800 bg-slate-950/50 p-1 sm:p-1.5 gap-1 shrink-0 overflow-x-auto scrollbar-none snap-x snap-mandatory [-webkit-overflow-scrolling:touch]">
             {[
               { id: 'platform', label: 'Plataforma', shortLabel: 'Apps', icon: <Smartphone className="w-3.5 h-3.5" /> },
-              { id: 'content', label: isCommentPlatform ? 'Comentarios' : 'Mensajes', shortLabel: isCommentPlatform ? 'Texto' : 'Chat', icon: <MessageSquare className="w-3.5 h-3.5" /> },
+              { id: 'content', label: isReviewPlatform ? 'Reseña' : isStoryPlatform ? 'Historia' : isPushPlatform ? 'Push' : isCommentPlatform ? 'Comentarios' : 'Mensajes', shortLabel: isReviewPlatform ? 'Reseña' : isStoryPlatform ? 'Story' : isPushPlatform ? 'Push' : isCommentPlatform ? 'Texto' : 'Chat', icon: <MessageSquare className="w-3.5 h-3.5" /> },
               { id: 'profile', label: 'Contacto & Barra', shortLabel: 'Perfil', icon: <User className="w-3.5 h-3.5" /> },
               { id: 'style', label: 'Diseño & Marco', shortLabel: 'Estilo', icon: <Palette className="w-3.5 h-3.5" /> },
             ].map((tab) => (
@@ -479,7 +514,13 @@ export default function App() {
 
             {activeTab === 'content' && (
               <>
-                {isCommentPlatform ? (
+                {isReviewPlatform ? (
+                  <ReviewEditor reviewConfig={state.reviewConfig} onChange={handleUpdateReviewConfig} />
+                ) : isStoryPlatform ? (
+                  <StoryEditor storyConfig={state.storyConfig} onChange={handleUpdateStoryConfig} />
+                ) : isPushPlatform ? (
+                  <PushEditor pushConfig={state.pushConfig} onChange={handleUpdatePushConfig} />
+                ) : isCommentPlatform ? (
                   <CommentEditor
                     commentConfig={state.commentConfig}
                     onChangeCommentConfig={handleUpdateCommentConfig}

@@ -7,9 +7,13 @@ export type PlatformId =
   | 'messenger'
   | 'android_sms'
   | 'tiktok_comment'
-  | 'twitter_dm';
+  | 'twitter_dm'
+  | 'google_review'
+  | 'trustpilot_review'
+  | 'instagram_story'
+  | 'push_notification';
 
-export type MockType = 'chat' | 'comment';
+export type MockType = 'chat' | 'comment' | 'review' | 'story' | 'notification';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -125,6 +129,48 @@ export interface CommentConfig {
   totalCommentsCount?: string;
 }
 
+export interface ReviewConfig {
+  businessName: string;
+  businessAvatar: string;
+  businessAddress?: string;
+  rating: number; // 1-5
+  reviewDate: string; // ej. hace 2 días
+  authorName: string;
+  authorAvatar: string;
+  isLocalGuide?: boolean;
+  reviewCount?: string; // ej. 23 reseñas
+  content: string;
+  helpfulCount?: string; // ej. 12 personas encontraron útil
+  ownerResponse?: string;
+  ownerResponseDate?: string;
+  verifiedPurchase?: boolean;
+  platformLabel: 'google' | 'trustpilot';
+  trustScore?: string; // ej. 4.8
+}
+
+export interface StoryConfig {
+  storyOwnerUsername: string;
+  storyOwnerAvatar: string;
+  storyImageUrl: string;
+  mode: 'reply' | 'poll';
+  pollQuestion?: string;
+  pollOptions?: [string, string]; // ej. ["Sí","No"]
+  pollPercent?: [number, number]; // ej. [68,32]
+  replyText?: string; // texto en caja de respuesta
+  viewerCount?: string; // ej. Visto por 1.2k
+}
+
+export interface PushConfig {
+  appName: string;
+  appIcon: string;
+  title: string;
+  body: string;
+  timeAgo: string; // ej. ahora, hace 2 min
+  badgeCount?: number;
+  pushStyle: 'ios' | 'android';
+  showActions?: boolean;
+}
+
 export interface ExportSettings {
   format: 'png' | 'jpeg' | 'webp';
   scale: 1 | 2 | 3 | 4;
@@ -148,6 +194,9 @@ export interface MockState {
   chat: ChatConfig;
   messages: Message[];
   commentConfig: CommentConfig;
+  reviewConfig: ReviewConfig;
+  storyConfig: StoryConfig;
+  pushConfig: PushConfig;
   exportSettings: ExportSettings;
 }
 

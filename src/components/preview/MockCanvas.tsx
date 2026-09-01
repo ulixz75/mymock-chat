@@ -11,6 +11,10 @@ import { MessengerView } from './MessengerView';
 import { AndroidSMSView } from './AndroidSMSView';
 import { TikTokCommentView } from './TikTokCommentView';
 import { TwitterView } from './TwitterView';
+import { GoogleReviewView } from './GoogleReviewView';
+import { TrustpilotView } from './TrustpilotView';
+import { InstagramStoryView } from './InstagramStoryView';
+import { PushNotificationView } from './PushNotificationView';
 
 interface Props {
   state: MockState;
@@ -154,6 +158,14 @@ export const MockCanvas = forwardRef<HTMLDivElement, Props>(({
             selectedMessageId={selectedMessageId}
           />
         );
+      case 'google_review':
+        return <GoogleReviewView state={state} />;
+      case 'trustpilot_review':
+        return <TrustpilotView state={state} />;
+      case 'instagram_story':
+        return <InstagramStoryView state={state} />;
+      case 'push_notification':
+        return <PushNotificationView state={state} />;
       default:
         return <WhatsAppView state={state} />;
     }

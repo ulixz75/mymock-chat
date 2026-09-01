@@ -8,7 +8,11 @@ import {
   Flame, 
   Twitter, 
   Sparkles,
-  MessageCircle
+  MessageCircle,
+  Star,
+  ShieldCheck,
+  Bell,
+  Smartphone as PhoneIcon
 } from 'lucide-react';
 
 interface Props {
@@ -91,6 +95,38 @@ export const PlatformSelector: React.FC<Props> = ({ currentPlatform, onSelectPla
       category: 'Mensajes X',
       icon: <Twitter className="w-5 h-5" />,
       color: 'from-slate-700 to-slate-900'
+    },
+    {
+      id: 'google_review',
+      name: 'Google Reviews',
+      category: 'Reseña 5★ Google',
+      icon: <Star className="w-5 h-5" />,
+      color: 'from-[#4285f4] to-[#34a853]',
+      badge: 'Nuevo'
+    },
+    {
+      id: 'trustpilot_review',
+      name: 'Trustpilot',
+      category: 'Reseña Verificada',
+      icon: <ShieldCheck className="w-5 h-5" />,
+      color: 'from-[#00b67a] to-[#005128]',
+      badge: 'Nuevo'
+    },
+    {
+      id: 'instagram_story',
+      name: 'Instagram Story',
+      category: 'Reply / Poll',
+      icon: <PhoneIcon className="w-5 h-5" />,
+      color: 'from-pink-500 via-purple-500 to-orange-400',
+      badge: 'Story'
+    },
+    {
+      id: 'push_notification',
+      name: 'Push Notificación',
+      category: 'iOS / Android',
+      icon: <Bell className="w-5 h-5" />,
+      color: 'from-slate-800 to-indigo-600',
+      badge: 'Push'
     }
   ];
 
@@ -101,7 +137,7 @@ export const PlatformSelector: React.FC<Props> = ({ currentPlatform, onSelectPla
           Plataforma & Formato
         </label>
         <span className="text-[11px] text-indigo-400 font-medium flex items-center gap-1">
-          <Sparkles className="w-3 h-3" /> 9 Plantillas Pro
+          <Sparkles className="w-3 h-3" /> 13 Plantillas Pro
         </span>
       </div>
 
