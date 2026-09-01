@@ -48,6 +48,7 @@ export interface Message {
   voiceDuration?: string;
   voiceProgress?: number; // 0-100
   isVoicePlayed?: boolean;
+  voiceWaveform?: number[]; // alturas 10-100 para grafica, editable por usuario
   reactions?: MessageReaction[];
   replyTo?: QuotedReply;
   senderName?: string; // For group chats

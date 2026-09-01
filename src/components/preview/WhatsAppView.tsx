@@ -173,20 +173,26 @@ export const WhatsAppView: React.FC<Props> = ({
                     </div>
                     
                     <div className="flex-1 flex flex-col justify-center">
-                      {/* Waveform graphic */}
-                      <div className="flex items-center space-x-0.75 h-6">
-                        {[40, 65, 85, 30, 90, 50, 75, 45, 95, 35, 60, 80, 55, 30, 70, 90, 45, 60].map((h, i) => (
-                          <div
-                            key={i}
-                            className={`w-1 rounded-full ${
-                              i < ((msg.voiceProgress || 60) / 100) * 18
-                                ? isDark ? 'bg-emerald-400' : 'bg-emerald-600'
-                                : isDark ? 'bg-white/30' : 'bg-slate-300'
-                            }`}
-                            style={{ height: `${h}%` }}
-                          />
-                        ))}
-                      </div>
+                      {/* Waveform graphic - editable longitud y alturas */}
+                      {(() => {
+                        const waveform = msg.voiceWaveform && msg.voiceWaveform.length > 0 ? msg.voiceWaveform : [40, 65, 85, 30, 90, 50, 75, 45, 95, 35, 60, 80, 55, 30, 70, 90, 45, 60];
+                        const progressBars = Math.round(((msg.voiceProgress ?? 65) / 100) * waveform.length);
+                        return (
+                          <div className="flex items-center gap-[2px] h-6">
+                            {waveform.map((h, i) => (
+                              <div
+                                key={i}
+                                className={`w-[3px] flex-1 max-w-[4px] rounded-full ${
+                                  i < progressBars
+                                    ? isDark ? 'bg-emerald-400' : 'bg-emerald-600'
+                                    : isDark ? 'bg-white/30' : 'bg-slate-300'
+                                }`}
+                                style={{ height: `${h}%` }}
+                              />
+                            ))}
+                          </div>
+                        );
+                      })()}
                       
                       <div className="flex items-center justify-between text-[11px] text-white/70 mt-0.5">
                         <span>{msg.voiceDuration || '0:42'}</span>

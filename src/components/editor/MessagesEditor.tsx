@@ -43,6 +43,10 @@ export const MessagesEditor: React.FC<Props> = ({
   const [newStatus, setNewStatus] = useState<MessageStatus>('read');
   const [mediaUrl, setMediaUrl] = useState('');
   const [voiceDuration, setVoiceDuration] = useState('0:35');
+  const [voiceProgress, setVoiceProgress] = useState(65);
+  const [voiceBars, setVoiceBars] = useState(18);
+
+  const generateWaveform = (bars: number) => Array.from({ length: bars }, () => Math.floor(25 + Math.random() * 70));
 
   const handleAddNew = (sender: MessageSender = newSender) => {
     const newMessage: Message = {
@@ -54,8 +58,9 @@ export const MessagesEditor: React.FC<Props> = ({
       status: newStatus,
       mediaUrl: newType === 'image' ? (mediaUrl || SAMPLE_ATTACHMENTS.receipt) : undefined,
       voiceDuration: newType === 'voice' ? voiceDuration : undefined,
-      voiceProgress: 65,
+      voiceProgress: newType === 'voice' ? voiceProgress : 65,
       isVoicePlayed: true,
+      voiceWaveform: newType === 'voice' ? generateWaveform(voiceBars) : undefined,
     };
 
     onAddMessage(newMessage);
@@ -175,25 +180,53 @@ export const MessagesEditor: React.FC<Props> = ({
         )}
 
         {newType === 'voice' && (
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1">Duración (ej. 0:45)</label>
-              <input
-                type="text"
-                value={voiceDuration}
-                onChange={(e) => setVoiceDuration(e.target.value)}
-                className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white"
-              />
+          <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">Duración (ej. 0:45)</label>
+                <input
+                  type="text"
+                  value={voiceDuration}
+                  onChange={(e) => setVoiceDuration(e.target.value)}
+                  className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white"
+                  placeholder="0:35"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">Hora</label>
+                <input
+                  type="text"
+                  value={newTime}
+                  onChange={(e) => setNewTime(e.target.value)}
+                  className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1">Hora</label>
-              <input
-                type="text"
-                value={newTime}
-                onChange={(e) => setNewTime(e.target.value)}
-                className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white"
-              />
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">Progreso reproducido ({voiceProgress}%)</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={voiceProgress}
+                  onChange={(e) => setVoiceProgress(parseInt(e.target.value, 10))}
+                  className="w-full accent-emerald-500 cursor-pointer"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">Longitud gráfica ({voiceBars} barras)</label>
+                <input
+                  type="range"
+                  min="8"
+                  max="32"
+                  value={voiceBars}
+                  onChange={(e) => setVoiceBars(parseInt(e.target.value, 10))}
+                  className="w-full accent-emerald-500 cursor-pointer"
+                />
+              </div>
             </div>
+            <p className="text-[10px] text-slate-500">La gráfica se genera aleatoria según la longitud. Podrás regenerarla al editar el mensaje.</p>
           </div>
         )}
 
@@ -330,14 +363,34 @@ export const MessagesEditor: React.FC<Props> = ({
                 </div>
               </div>
 
+              {/* Tipo de mensaje switcher */}
+              <div className="flex items-center gap-1 mt-2">
+                {(['text','image','voice'] as MessageType[]).map((t) => (
+                  <button
+                    key={t}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (t === 'voice' && !msg.voiceWaveform) {
+                        onUpdateMessage(msg.id, { type: t, voiceDuration: msg.voiceDuration || '0:35', voiceProgress: msg.voiceProgress ?? 65, isVoicePlayed: msg.isVoicePlayed ?? true, voiceWaveform: Array.from({length: 18}, () => Math.floor(25+Math.random()*70)) });
+                      } else {
+                        onUpdateMessage(msg.id, { type: t });
+                      }
+                    }}
+                    className={`px-2 py-1 rounded-md text-[10px] font-semibold border transition-colors ${msg.type === t ? 'bg-indigo-600 text-white border-indigo-500' : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'}`}
+                  >
+                    {t === 'text' ? 'Texto' : t === 'image' ? 'Foto' : 'Audio'}
+                  </button>
+                ))}
+              </div>
+
               {/* Message text editor */}
               <div className="mt-2 space-y-2">
                 <textarea
                   value={msg.text}
                   onChange={(e) => onUpdateMessage(msg.id, { text: e.target.value })}
-                  rows={2}
+                  rows={msg.type === 'voice' ? 1 : 2}
                   className="w-full px-2.5 py-1.5 bg-slate-950/90 border border-slate-800 rounded-md text-xs text-slate-100 focus:outline-none focus:border-indigo-500 resize-none leading-relaxed"
-                  placeholder={msg.type === 'voice' ? 'Nota de voz' : 'Texto del mensaje...'}
+                  placeholder={msg.type === 'voice' ? 'Leyenda opcional para audio (vacío = solo ondas)' : 'Texto del mensaje...'}
                 />
 
                 {/* Image upload if message has image or user wants to add one */}
@@ -357,6 +410,87 @@ export const MessagesEditor: React.FC<Props> = ({
                         className="hidden" 
                       />
                     </label>
+                  </div>
+                )}
+
+                {/* Voice editor - editable duración, progreso y gráfica */}
+                {msg.type === 'voice' && (
+                  <div className="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-2.5">
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-[10px] font-medium text-slate-400 mb-1">Duración</label>
+                        <input
+                          type="text"
+                          value={msg.voiceDuration || '0:35'}
+                          onChange={(e) => onUpdateMessage(msg.id, { voiceDuration: e.target.value })}
+                          placeholder="0:35"
+                          className="w-full px-2 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-white text-center focus:outline-none focus:border-emerald-500"
+                        />
+                      </div>
+                      <label className="flex items-center justify-center gap-2 px-2 py-1 bg-slate-900 border border-slate-800 rounded-md cursor-pointer hover:bg-slate-800">
+                        <input
+                          type="checkbox"
+                          checked={!!msg.isVoicePlayed}
+                          onChange={(e) => onUpdateMessage(msg.id, { isVoicePlayed: e.target.checked })}
+                          className="w-3.5 h-3.5 rounded text-emerald-600 bg-slate-950 border-slate-700"
+                        />
+                        <span className="text-[11px] text-slate-300 font-medium">{msg.isVoicePlayed ? 'Reproducido' : 'Pausado'}</span>
+                      </label>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-[10px] font-medium text-slate-400">Progreso reproducido</label>
+                        <span className="text-[10px] font-bold text-emerald-400">{msg.voiceProgress ?? 65}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={msg.voiceProgress ?? 65}
+                        onChange={(e) => onUpdateMessage(msg.id, { voiceProgress: parseInt(e.target.value, 10) })}
+                        className="w-full accent-emerald-500 cursor-pointer"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-[10px] font-medium text-slate-400">Longitud gráfica ({(msg.voiceWaveform?.length || 18)} barras)</label>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const bars = msg.voiceWaveform?.length || 18;
+                            const newWave = Array.from({ length: bars }, () => Math.floor(25 + Math.random() * 70));
+                            onUpdateMessage(msg.id, { voiceWaveform: newWave });
+                          }}
+                          className="text-[10px] px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 rounded border border-slate-700"
+                        >
+                          Regenerar
+                        </button>
+                      </div>
+                      <input
+                        type="range"
+                        min="8"
+                        max="32"
+                        value={msg.voiceWaveform?.length || 18}
+                        onChange={(e) => {
+                          const bars = parseInt(e.target.value, 10);
+                          const newWave = Array.from({ length: bars }, () => Math.floor(25 + Math.random() * 70));
+                          onUpdateMessage(msg.id, { voiceWaveform: newWave });
+                        }}
+                        className="w-full accent-emerald-500 cursor-pointer"
+                      />
+                      {/* Mini preview de ondas */}
+                      <div className="mt-1.5 flex items-center gap-[2px] h-6 px-2 py-1 bg-slate-900 rounded border border-slate-800">
+                        {(msg.voiceWaveform || Array.from({length: 18}, () => 50)).slice(0, msg.voiceWaveform?.length || 18).map((h, i) => (
+                          <div
+                            key={i}
+                            className={`w-[3px] rounded-full flex-1 max-w-[4px] ${i < ((msg.voiceProgress ?? 65)/100) * (msg.voiceWaveform?.length || 18) ? 'bg-emerald-500' : 'bg-slate-600'}`}
+                            style={{ height: `${h}%` }}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 
