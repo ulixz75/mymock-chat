@@ -151,7 +151,7 @@ export const PlatformSelector: React.FC<Props> = ({ currentPlatform, onSelectPla
           Plataforma & Formato
         </label>
         <span className="text-[11px] text-indigo-400 font-medium flex items-center gap-1">
-          <Sparkles className="w-3 h-3" /> 13 Plantillas Pro
+          <Sparkles className="w-3 h-3" /> {platforms.length} formatos
         </span>
       </div>
 

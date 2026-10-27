@@ -176,6 +176,12 @@ export interface PushConfig {
 
 /** Datos visuales compartidos por las pantallas de llamadas y reuniones. */
 export interface VideoCallConfig {
+  participants?: CallParticipant[];
+  layout?: 'gallery' | 'speaker';
+  microphoneMuted?: boolean;
+  cameraOff?: boolean;
+  recording?: boolean;
+  chatText?: string;
   mode: 'incoming' | 'active' | 'missed';
   duration: string;
   meetingTitle: string;
@@ -183,6 +189,15 @@ export interface VideoCallConfig {
   participantCount: number;
   showSelfView: boolean;
   showChatPanel: boolean;
+}
+
+/** Una imagen representa un fotograma de cámara; no se solicita acceso a dispositivos. */
+export interface CallParticipant {
+  id: string;
+  name: string;
+  image: string;
+  cameraOff: boolean;
+  muted: boolean;
 }
 
 export interface ExportSettings {

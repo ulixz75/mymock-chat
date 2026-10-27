@@ -9,6 +9,10 @@ PWA para crear y exportar **maquetas realistas en alta resolución** de conversa
 
 Stack: **React 19 + TypeScript + Vite 6 + Tailwind CSS 4**
 
+## Videollamadas y reuniones
+
+WhatsApp móvil, Zoom Workplace de escritorio y Google Meet web tienen vistas independientes. Selecciona el formato en **Plataforma** y edita participantes, fotos y controles en **Llamada**. Consulta [la documentación de los mocks](docs/video-call-mocks.md) para referencias, compatibilidad y verificación.
+
 ## Demo
 - `npm run dev` → http://localhost:3000
 - Build estático en `dist/` (Vite)

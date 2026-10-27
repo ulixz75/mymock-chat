@@ -1,0 +1,77 @@
+/* Export geometry is fixed, independent of the editor viewport. Desktop previews
+   scroll on small screens so exports never become a mobile-looking meeting. */
+.desktop-call-frame { width:960px; flex-shrink:0; overflow:hidden; border-radius:10px; }
+.zoom-call,.meet-call { width:960px; height:600px; display:flex; flex-direction:column; color:#f5f5f5; font:14px Arial,sans-serif; }
+.meeting-body { display:flex; flex:1; min-height:0; }
+.zoom-call { background:#000; }
+.zoom-window { height:32px; background:#222; display:flex; align-items:center; justify-content:space-between; padding:0 12px; font-size:12px; color:#ddd; }
+.zoom-window>span:first-child { font-weight:700; color:#a9caff; }
+.zoom-window>div,.zoom-top>span { display:flex; align-items:center; gap:16px; }
+.zoom-top { height:36px; display:flex; align-items:center; justify-content:space-between; padding:0 15px; font-size:12px; }
+.zoom-gallery,.meet-gallery { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:minmax(0,1fr); flex:1; min-width:0; }
+.zoom-gallery { padding:12px 18px 22px; gap:4px; align-content:center; }
+.call-tile { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; min-height:0; background:#303134; }
+.call-tile>img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+.zoom-tile { border:2px solid transparent; background:#202020; }
+.zoom-tile.speaking { border-color:#91d936; }
+.call-name { position:absolute; left:8px; bottom:8px; display:flex; align-items:center; gap:5px; max-width:90%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.zoom-tile .call-name { left:0; bottom:0; padding:3px 6px; background:#000b; font-size:12px; }
+.call-initial { background:#52718a; width:80px; height:80px; border-radius:50%; display:grid; place-items:center; font-size:36px; }
+.zoom-tile .call-initial { background:none; width:auto; font-size:28px; }
+.zoom-toolbar { height:68px; background:#202020; display:flex; align-items:center; justify-content:space-around; gap:8px; padding:0 14px; }
+.zoom-toolbar>div { display:flex; flex-direction:column; align-items:center; gap:5px; }
+.zoom-toolbar>div>span { display:flex; align-items:center; gap:7px; }
+.zoom-toolbar small { font-size:11px; }
+.zoom-share { color:#4cce65; }
+.zoom-leave { background:#b82d27; border-radius:7px; padding:9px 20px; font-weight:600; }
+.record-dot { display:inline-block; width:9px; height:9px; border-radius:50%; background:#f44336; }
+.meet-call { background:#202124; padding:16px 16px 0; position:relative; }
+.meet-gallery { gap:12px; }
+.meet-tile { border-radius:12px; border:3px solid transparent; }
+.meet-tile.speaking { border-color:#8ab4f8; }
+.meet-tile .call-name { text-shadow:0 1px 3px #000; font-size:13px; bottom:12px; left:13px; }
+.meet-tile-status { position:absolute; top:10px; right:10px; border-radius:50%; background:#202124b3; width:27px; height:27px; display:grid; place-items:center; }
+.meet-tile.speaking .meet-tile-status { background:#1a73e8; }
+.meet-toolbar { height:80px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.meet-code { font-size:12px; display:flex; gap:10px; white-space:nowrap; }
+.meet-controls,.meet-details { display:flex; align-items:center; gap:7px; }
+.meet-controls>span { width:39px; height:40px; background:#3c4043; border-radius:12px; display:grid; place-items:center; }
+.meet-controls svg,.meet-details svg { width:20px; height:20px; }
+.meet-controls>span.off { background:#f9dedc; color:#410e0b; }
+.meet-controls>span.meet-hangup { background:#ea4335; width:56px; border-radius:24px; }
+.meet-hangup svg,.hangup svg { transform:rotate(135deg); }
+.meet-details { gap:14px; }
+.meet-details>span { position:relative; }
+.meet-details small { position:absolute; top:-17px; right:-4px; font-size:10px; }
+.meet-recording { height:25px; display:flex; align-items:center; gap:7px; font-size:12px; }
+.speaker-layout { grid-template-columns:3fr 1fr; }
+.speaker-layout>.call-tile:first-child { grid-row:span 5; }
+.call-chat { width:245px; flex-shrink:0; display:flex; flex-direction:column; background:#fff; color:#202124; margin-left:10px; padding:18px; font-size:12px; }
+.call-chat header { display:flex; align-items:center; justify-content:space-between; font-size:14px; margin-bottom:24px; }
+.call-chat footer { margin-top:auto; background:#f1f3f4; border-radius:24px; padding:12px; display:flex; justify-content:space-between; color:#666; }
+.meet-chat { border-radius:12px; }
+.chat-notice { background:#f1f3f4; padding:12px; border-radius:6px; margin-bottom:24px; line-height:1.5; }
+.chat-message p { margin:8px 0; overflow-wrap:anywhere; }
+.chat-message small { color:#777; }
+.wa-call { position:relative; flex:1; min-height:640px; overflow:hidden; background:#162824; color:white; font-family:Arial,sans-serif; }
+.wa-remote,.wa-shade { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.wa-shade { background:linear-gradient(#0009,transparent 32%,transparent 60%,#0009); }
+.wa-call-top { position:relative; display:flex; align-items:center; justify-content:space-between; padding:20px 18px 12px; }
+.wa-call-top>span { display:flex; align-items:center; gap:4px; font-size:10px; color:#ddd; }
+.wa-identity { position:relative; text-align:center; padding:6px 16px; }
+.wa-identity h2 { font-weight:500; font-size:27px; line-height:1.3; }
+.wa-identity p { margin-top:8px; font-size:14px; color:#ddd; }
+.wa-ringing { padding-top:55px; }
+.wa-ringing>img,.wa-camera-off>img { width:105px; height:105px; border-radius:50%; object-fit:cover; margin:0 auto 24px; }
+.wa-camera-off { position:absolute; inset:220px 0 auto; text-align:center; font-size:13px; color:#ccc; }
+.wa-self { position:absolute; right:16px; bottom:130px; width:100px; height:146px; border-radius:12px; background:#26332f; overflow:hidden; display:grid; place-items:center; box-shadow:0 2px 10px #0005; }
+.wa-self>img { width:100%; height:100%; object-fit:cover; }
+.wa-call-bottom { position:absolute; bottom:0; left:0; right:0; padding:12px 20px 24px; background:#182320dd; border-radius:24px 24px 0 0; }
+.wa-handle { width:32px; height:4px; border-radius:4px; background:#7d8683; margin:0 auto 20px; }
+.wa-controls { display:flex; justify-content:space-between; }
+.wa-controls>span,.wa-incoming-controls span { width:54px; height:54px; background:#ffffff25; display:grid; place-items:center; border-radius:50%; }
+.wa-controls .is-off { background:#eee; color:#111; }
+.wa-controls .hangup,.wa-incoming-controls .hangup { background:#ec3f48; }
+.wa-incoming-controls { display:flex; justify-content:space-around; padding:16px 0; }
+.wa-incoming-controls>div { display:flex; flex-direction:column; align-items:center; gap:12px; }
+.wa-incoming-controls .answer { background:#25d366; }

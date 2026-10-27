@@ -19,6 +19,7 @@ import {
 } from './types';
 import { DEFAULT_MOCK_STATE, TEMPLATES_LIBRARY } from './data/templates';
 import { MockCanvas } from './components/preview/MockCanvas';
+import { MeetingPreviewFit } from './components/preview/MeetingPreviewFit';
 import { PlatformSelector } from './components/editor/PlatformSelector';
 import { HeaderEditor } from './components/editor/HeaderEditor';
 import { MessagesEditor } from './components/editor/MessagesEditor';
@@ -27,6 +28,8 @@ import { AppearanceEditor } from './components/editor/AppearanceEditor';
 import { ReviewEditor } from './components/editor/ReviewEditor';
 import { StoryEditor } from './components/editor/StoryEditor';
 import { PushEditor } from './components/editor/PushEditor';
+import { VideoCallEditor } from './components/editor/VideoCallEditor';
+import { isCallPlatform } from './data/calls';
 import { ExportModal } from './components/modals/ExportModal';
 import { TemplatesModal } from './components/modals/TemplatesModal';
 import { ProjectsModal } from './components/modals/ProjectsModal';
@@ -327,6 +330,7 @@ export default function App() {
   const isReviewPlatform = state.platform === 'google_review' || state.platform === 'trustpilot_review';
   const isStoryPlatform = state.platform === 'instagram_story';
   const isPushPlatform = state.platform === 'push_notification';
+  const isCall = isCallPlatform(state.platform);
 
   return (
     <div className="flex flex-col h-full bg-slate-950 text-slate-100 font-sans">
@@ -457,8 +461,8 @@ export default function App() {
             <span className="hidden sm:inline truncate"> — Haz clic en cualquier mensaje o comentario para seleccionarlo y editarlo.</span>
           </div>
 
-          <div className="w-full flex items-center justify-center px-1 sm:px-0">
-            <MockCanvas
+          <div className={`w-full flex px-1 sm:px-0 ${isCall && state.platform !== 'whatsapp_video_call' ? 'overflow-x-auto justify-start' : 'items-center justify-center'}`}>
+            <MeetingPreviewFit enabled={state.platform === 'zoom_meeting' || state.platform === 'google_meet_meeting'}><MockCanvas
               ref={canvasRef}
               state={state}
               onUpdateMessage={handleUpdateMessage}
@@ -474,6 +478,7 @@ export default function App() {
               selectedMessageId={selectedMessageId}
               selectedCommentId={selectedCommentId}
             />
+            </MeetingPreviewFit>
           </div>
         </main>
 
@@ -483,7 +488,7 @@ export default function App() {
           <div className="flex items-center border-b border-slate-800 bg-slate-950/50 p-1 sm:p-1.5 gap-1 shrink-0 overflow-x-auto scrollbar-none snap-x snap-mandatory [-webkit-overflow-scrolling:touch]">
             {[
               { id: 'platform', label: 'Plataforma', shortLabel: 'Apps', icon: <Smartphone className="w-3.5 h-3.5" /> },
-              { id: 'content', label: isReviewPlatform ? 'Reseña' : isStoryPlatform ? 'Historia' : isPushPlatform ? 'Push' : isCommentPlatform ? 'Comentarios' : 'Mensajes', shortLabel: isReviewPlatform ? 'Reseña' : isStoryPlatform ? 'Story' : isPushPlatform ? 'Push' : isCommentPlatform ? 'Texto' : 'Chat', icon: <MessageSquare className="w-3.5 h-3.5" /> },
+              { id: 'content', label: isCall ? 'Llamada' : isReviewPlatform ? 'Reseña' : isStoryPlatform ? 'Historia' : isPushPlatform ? 'Push' : isCommentPlatform ? 'Comentarios' : 'Mensajes', shortLabel: isCall ? 'Llamada' : isReviewPlatform ? 'Reseña' : isStoryPlatform ? 'Story' : isPushPlatform ? 'Push' : isCommentPlatform ? 'Texto' : 'Chat', icon: <MessageSquare className="w-3.5 h-3.5" /> },
               { id: 'profile', label: 'Contacto & Barra', shortLabel: 'Perfil', icon: <User className="w-3.5 h-3.5" /> },
               { id: 'style', label: 'Diseño & Marco', shortLabel: 'Estilo', icon: <Palette className="w-3.5 h-3.5" /> },
             ].map((tab) => (
@@ -516,7 +521,9 @@ export default function App() {
 
             {activeTab === 'content' && (
               <>
-                {isReviewPlatform ? (
+                {isCall ? (
+                  <VideoCallEditor state={state} onChange={videoCallConfig => setState(prev => ({ ...prev, videoCallConfig }))} />
+                ) : isReviewPlatform ? (
                   <ReviewEditor reviewConfig={state.reviewConfig} onChange={handleUpdateReviewConfig} />
                 ) : isStoryPlatform ? (
                   <StoryEditor storyConfig={state.storyConfig} onChange={handleUpdateStoryConfig} />

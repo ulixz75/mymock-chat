@@ -73,7 +73,7 @@ export const AppearanceEditor: React.FC<Props> = ({
       </div>
 
       {/* Device Frame Style */}
-      <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-3">
+      {platform === 'zoom_meeting' || platform === 'google_meet_meeting' ? <p className="text-xs text-slate-400">Reunión de escritorio · captura de 960 × 600 px. El fondo y la escala de exportación se aplican abajo.</p> : <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-3">
         <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
           <Smartphone className="w-3.5 h-3.5 text-indigo-400" /> Marco del Dispositivo
         </span>
@@ -104,6 +104,7 @@ export const AppearanceEditor: React.FC<Props> = ({
         </div>
       </div>
 
+      }
       {/* WhatsApp or Instagram Specific Options */}
       {platform === 'whatsapp' && (
         <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-3">

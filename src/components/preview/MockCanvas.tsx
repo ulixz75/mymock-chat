@@ -15,7 +15,10 @@ import { GoogleReviewView } from './GoogleReviewView';
 import { TrustpilotView } from './TrustpilotView';
 import { InstagramStoryView } from './InstagramStoryView';
 import { PushNotificationView } from './PushNotificationView';
-import { VideoCallView } from './VideoCallView';
+import { WhatsAppVideoCallView } from './WhatsAppVideoCallView';
+import { ZoomMeetingView } from './ZoomMeetingView';
+import { GoogleMeetView } from './GoogleMeetView';
+import './calls.css';
 
 interface Props {
   state: MockState;
@@ -168,9 +171,11 @@ export const MockCanvas = forwardRef<HTMLDivElement, Props>(({
       case 'push_notification':
         return <PushNotificationView state={state} />;
       case 'whatsapp_video_call':
+        return <WhatsAppVideoCallView state={state} />;
       case 'zoom_meeting':
+        return <ZoomMeetingView state={state} />;
       case 'google_meet_meeting':
-        return <VideoCallView state={state} platform={platform} />;
+        return <GoogleMeetView state={state} />;
       default:
         return <WhatsAppView state={state} />;
     }
@@ -192,7 +197,9 @@ export const MockCanvas = forwardRef<HTMLDivElement, Props>(({
       }}
     >
       {/* Social Card Mode (like the attached testimonial photo) */}
-      {isCardMode ? (
+      {platform === 'zoom_meeting' || platform === 'google_meet_meeting' ? (
+        <div className="desktop-call-frame" style={{ boxShadow: exportSettings.showShadow ? '0 20px 60px #0005' : undefined }}>{renderPlatformContent()}</div>
+      ) : isCardMode ? (
         <div 
           className={`w-full max-w-[92vw] sm:max-w-[620px] rounded-xl sm:rounded-2xl overflow-hidden transition-shadow ${
             isDark ? 'bg-black text-white' : 'bg-white text-slate-900'
