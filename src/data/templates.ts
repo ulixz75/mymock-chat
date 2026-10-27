@@ -103,6 +103,10 @@ export const DEFAULT_MOCK_STATE: MockState = {
     pushStyle: 'ios',
     showActions: true,
   },
+  videoCallConfig: {
+    mode: 'active', duration: '00:12:48', meetingTitle: 'Reunión de equipo',
+    meetingCode: 'abc-defg-hij', participantCount: 4, showSelfView: true, showChatPanel: false,
+  },
   messages: [
     {
       id: 'm-1',

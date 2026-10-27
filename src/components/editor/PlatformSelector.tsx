@@ -12,7 +12,9 @@ import {
   Star,
   ShieldCheck,
   Bell,
-  Smartphone as PhoneIcon
+  Smartphone as PhoneIcon,
+  Video,
+  Users
 } from 'lucide-react';
 
 interface Props {
@@ -127,6 +129,18 @@ export const PlatformSelector: React.FC<Props> = ({ currentPlatform, onSelectPla
       icon: <Bell className="w-5 h-5" />,
       color: 'from-slate-800 to-indigo-600',
       badge: 'Push'
+    },
+    {
+      id: 'whatsapp_video_call', name: 'WhatsApp Videollamada', category: 'Llamada visual',
+      icon: <Video className="w-5 h-5" />, color: 'from-emerald-500 to-green-700', badge: 'Nuevo'
+    },
+    {
+      id: 'zoom_meeting', name: 'Zoom Meeting', category: 'Reunión virtual',
+      icon: <Video className="w-5 h-5" />, color: 'from-blue-500 to-blue-800', badge: 'Nuevo'
+    },
+    {
+      id: 'google_meet_meeting', name: 'Google Meet', category: 'Reunión virtual',
+      icon: <Users className="w-5 h-5" />, color: 'from-blue-500 via-green-500 to-yellow-500', badge: 'Nuevo'
     }
   ];
 

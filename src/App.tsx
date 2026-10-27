@@ -100,7 +100,9 @@ export default function App() {
     const isReview = platform === 'google_review' || platform === 'trustpilot_review';
     const isStory = platform === 'instagram_story';
     const isPush = platform === 'push_notification';
-    const mockType: MockType = isComment ? 'comment' : isReview ? 'review' : isStory ? 'story' : isPush ? 'notification' : 'chat';
+    const isVideoCall = platform === 'whatsapp_video_call';
+    const isMeeting = platform === 'zoom_meeting' || platform === 'google_meet_meeting';
+    const mockType: MockType = isComment ? 'comment' : isReview ? 'review' : isStory ? 'story' : isPush ? 'notification' : isVideoCall ? 'video_call' : isMeeting ? 'meeting' : 'chat';
     const isCardLike = isComment || isReview;
     
     // Pick relevant template if switching major types

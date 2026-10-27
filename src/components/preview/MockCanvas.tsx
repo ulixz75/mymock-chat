@@ -15,6 +15,7 @@ import { GoogleReviewView } from './GoogleReviewView';
 import { TrustpilotView } from './TrustpilotView';
 import { InstagramStoryView } from './InstagramStoryView';
 import { PushNotificationView } from './PushNotificationView';
+import { VideoCallView } from './VideoCallView';
 
 interface Props {
   state: MockState;
@@ -166,6 +167,10 @@ export const MockCanvas = forwardRef<HTMLDivElement, Props>(({
         return <InstagramStoryView state={state} />;
       case 'push_notification':
         return <PushNotificationView state={state} />;
+      case 'whatsapp_video_call':
+      case 'zoom_meeting':
+      case 'google_meet_meeting':
+        return <VideoCallView state={state} platform={platform} />;
       default:
         return <WhatsAppView state={state} />;
     }

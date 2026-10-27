@@ -11,9 +11,12 @@ export type PlatformId =
   | 'google_review'
   | 'trustpilot_review'
   | 'instagram_story'
-  | 'push_notification';
+  | 'push_notification'
+  | 'whatsapp_video_call'
+  | 'zoom_meeting'
+  | 'google_meet_meeting';
 
-export type MockType = 'chat' | 'comment' | 'review' | 'story' | 'notification';
+export type MockType = 'chat' | 'comment' | 'review' | 'story' | 'notification' | 'video_call' | 'meeting';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -171,6 +174,17 @@ export interface PushConfig {
   showActions?: boolean;
 }
 
+/** Datos visuales compartidos por las pantallas de llamadas y reuniones. */
+export interface VideoCallConfig {
+  mode: 'incoming' | 'active' | 'missed';
+  duration: string;
+  meetingTitle: string;
+  meetingCode: string;
+  participantCount: number;
+  showSelfView: boolean;
+  showChatPanel: boolean;
+}
+
 export interface ExportSettings {
   format: 'png' | 'jpeg' | 'webp';
   scale: 1 | 2 | 3 | 4;
@@ -197,6 +211,7 @@ export interface MockState {
   reviewConfig: ReviewConfig;
   storyConfig: StoryConfig;
   pushConfig: PushConfig;
+  videoCallConfig: VideoCallConfig;
   exportSettings: ExportSettings;
 }
 
